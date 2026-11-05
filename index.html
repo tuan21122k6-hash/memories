@@ -1,0 +1,1544 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>The Core Six — Kỷ Niệm Thanh Xuân</title>
+    <!-- Tailwind CSS CDN -->
+    <link rel="stylesheet" href="/cssfile/style.a8f31c2.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/jsfile/main.7d92e4b.js"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              warmCream: "#E8D2B5",
+              sageGreen: "#A5A79B",
+              terracotta: "#D97757",
+              espresso: "#2D2C2A",
+            },
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', "sans-serif"],
+              serif: ['"Playfair Display"', "serif"],
+              handwriting: ['"Caveat"', "cursive"],
+            },
+          },
+        },
+      };
+    </script>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  </head>
+  <body class="relative pb-28">
+    <!-- 1. LOCK SCREEN (Birthdate input check, NO dropdown) -->
+    <div
+      id="lock-screen"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/90 backdrop-blur-xl transition-all duration-700"
+    >
+      <div
+        class="blob-shape w-96 h-96 bg-sageGreen -top-20 -left-20 animate-pulse"
+      ></div>
+      <div
+        class="blob-shape w-96 h-96 bg-terracotta -bottom-20 -right-20 opacity-40"
+      ></div>
+
+      <div
+        class="earthy-card max-w-md w-full p-8 rounded-[2.5rem] relative z-10 border border-white/20 shadow-2xl text-center"
+      >
+        <div
+          class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-terracotta/20 text-terracotta flex items-center justify-center text-2xl shadow-inner"
+        >
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <span
+          class="text-xs font-semibold tracking-widest text-terracotta uppercase mb-1 block"
+          >Bảo Mật Kỷ Niệm</span
+        >
+        <h2 class="text-3xl font-bold text-espresso mb-2 font-serif">
+          The Core Six
+        </h2>
+        <p class="text-xs text-espresso/70 mb-6 font-light leading-relaxed">
+          Nhập chính xác ngày sinh của một trong 6 thành viên (Định dạng:
+          <code
+            class="bg-espresso/10 px-1.5 py-0.5 rounded font-mono text-terracotta font-semibold"
+            >DD/MM/YYYY</code
+          >) để mở khóa không gian thanh xuân.
+        </p>
+
+        <div class="space-y-4 text-left">
+          <div>
+            <label class="block text-xs font-semibold text-espresso/80 mb-1.5"
+              >Ngày sinh xác thực:</label
+            >
+            <div class="relative">
+              <input
+                type="text"
+                id="birthdate-input"
+                placeholder="VD: 20/12/2006"
+                maxlength="10"
+                class="w-full px-4 py-3.5 rounded-2xl bg-white/90 border border-espresso/15 text-espresso text-sm tracking-wider font-mono focus:outline-none focus:border-terracotta shadow-sm"
+              />
+              <div
+                class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-espresso/40"
+              >
+                <i class="fa-regular fa-calendar"></i>
+              </div>
+            </div>
+          </div>
+          <button
+            onclick="handleLogin()"
+            class="w-full py-4 rounded-2xl bg-terracotta hover:bg-terracotta/90 text-white font-bold text-sm tracking-wide shadow-lg shadow-terracotta/30 transition transform active:scale-95"
+          >
+            Mở Khóa Kỷ Niệm ✨
+          </button>
+        </div>
+        <p class="text-[11px] text-espresso/50 mt-4 italic">
+          Khu vực riêng tư độc quyền của 6 thành viên.
+        </p>
+      </div>
+    </div>
+
+    <!-- MAIN WEBSITE CONTENT (Hidden initially) -->
+    <div
+      id="main-website"
+      class="opacity-0 pointer-events-none transition-opacity duration-700 relative z-10"
+    >
+      <!-- Glowing 2D Background Blobs for Depth -->
+      <div
+        class="blob-shape w-[28rem] h-[28rem] bg-sageGreen top-10 -left-20"
+      ></div>
+      <div
+        class="blob-shape w-[32rem] h-[32rem] bg-terracotta top-1/3 -right-24 opacity-35"
+      ></div>
+      <div
+        class="blob-shape w-[35rem] h-[35rem] bg-sageGreen bottom-1/4 left-1/4 opacity-30"
+      ></div>
+
+      <div class="max-w-6xl mx-auto px-4 pt-8 sm:pt-12">
+        <!-- Header Section with Mixed Typography & 2D Depth -->
+        <header class="text-center mb-10 relative">
+          <div
+            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-terracotta/15 border border-terracotta/30 text-terracotta text-xs font-semibold mb-4 shadow-sm"
+          >
+            <span id="welcome-badge">The Core Six Archive</span> • Kỷ Niệm Thanh
+            Xuân
+          </div>
+
+          <h1
+            class="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-espresso mb-4 leading-tight"
+          >
+            <span class="font-serif italic text-sageGreen drop-shadow-sm"
+              >Hành Trình</span
+            >
+            <span
+              class="font-handwriting text-terracotta text-5xl sm:text-7xl mx-2 drop-shadow-[0_4px_12px_rgba(217,119,87,0.35)]"
+              >Thanh Xuân</span
+            >
+            <span class="font-sans font-extrabold text-espresso">Bình Yên</span>
+          </h1>
+
+          <p
+            class="max-w-xl mx-auto text-espresso/80 text-sm sm:text-base font-light px-2 mb-6"
+          >
+            Nơi lưu giữ trọn vẹn những chuyến đi, buổi tiệc và khoảnh khắc rực
+            rỡ qua hàng chục bức ảnh của 6 chúng ta (Đồng bộ Realtime qua
+            Firebase).
+          </p>
+
+          <!-- Action Toolbar: Upload Button -->
+          <div class="flex items-center justify-center gap-3">
+            <button
+              onclick="openUploadModal()"
+              class="px-5 py-2.5 rounded-full bg-terracotta text-white font-semibold text-xs sm:text-sm shadow-lg shadow-terracotta/30 hover:bg-terracotta/90 transition flex items-center gap-2"
+            >
+              <i class="fa-solid fa-cloud-arrow-up"></i> Tải Ảnh Lên Kỷ Niệm
+            </button>
+            <button
+              onclick="showInfoModal()"
+              class="px-5 py-2.5 rounded-full bg-white/70 border border-espresso/15 text-espresso font-semibold text-xs sm:text-sm shadow-sm hover:bg-white transition flex items-center gap-2"
+            >
+              <i class="fa-solid fa-users"></i> Góc Thành Viên
+            </button>
+          </div>
+        </header>
+
+        <!-- Events Overview Grid -->
+        <section class="mb-16">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold font-serif text-espresso">
+              Danh Sách Sự Kiện & Chuyến Đi
+            </h2>
+            <span
+              class="text-xs font-mono text-espresso/70 bg-white/60 px-3 py-1 rounded-full border border-espresso/10"
+              ><i class="fa-solid fa-images mr-1"></i> 4 Album Lớn</span
+            >
+          </div>
+
+          <div class="events-grid" id="events-container">
+            <!-- Event cards dynamically injected -->
+          </div>
+        </section>
+
+        <!-- Guestbook & Memory Notes Section -->
+        <section id="guestbook-section" class="max-w-3xl mx-auto mb-20">
+          <div
+            class="earthy-card rounded-3xl p-6 sm:p-8 shadow-xl border border-espresso/10"
+          >
+            <div class="flex items-center gap-3 mb-6">
+              <div
+                class="w-10 h-10 rounded-xl bg-terracotta/20 text-terracotta flex items-center justify-center text-lg"
+              >
+                <i class="fa-solid fa-book-bookmark"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-espresso font-serif">
+                  Sổ Lưu Bút Thanh Xuân (Đồng Bộ Cloud)
+                </h3>
+                <p class="text-xs text-espresso/70">
+                  Gửi gắm lời nhắn yêu thương đến các thành viên trong nhóm.
+                </p>
+              </div>
+            </div>
+
+            <!-- Add Note Form -->
+            <div class="space-y-4 mb-8">
+              <div>
+                <input
+                  type="text"
+                  id="guestbook-author"
+                  placeholder="Tên của bạn trong nhóm..."
+                  class="w-full px-4 py-3 rounded-2xl bg-white/70 border border-espresso/15 text-espresso text-sm focus:outline-none focus:border-terracotta"
+                />
+              </div>
+              <div>
+                <textarea
+                  id="guestbook-message"
+                  rows="3"
+                  placeholder="Viết đôi lời nhắn gửi đến The Core Six..."
+                  class="w-full px-4 py-3 rounded-2xl bg-white/70 border border-espresso/15 text-espresso text-sm focus:outline-none focus:border-terracotta"
+                ></textarea>
+              </div>
+              <button
+                onclick="addGuestbookNote()"
+                class="px-6 py-3 rounded-xl bg-terracotta hover:bg-terracotta/90 text-white font-semibold text-sm shadow-md shadow-terracotta/30 transition"
+              >
+                Gửi Lời Nhắn 💌
+              </button>
+            </div>
+
+            <!-- Notes Container -->
+            <div id="guestbook-container" class="space-y-4">
+              <!-- Dynamically injected guestbook notes -->
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Mobile-First Bottom Navigation Bar -->
+      <nav class="fixed bottom-4 left-4 right-4 z-40 max-w-md mx-auto">
+        <div
+          class="earthy-card rounded-full px-6 py-3 flex items-center justify-between shadow-2xl border border-espresso/10"
+        >
+          <button
+            onclick="scrollToTop()"
+            class="flex flex-col items-center text-terracotta hover:text-espresso transition"
+          >
+            <i class="fa-solid fa-house text-lg"></i>
+            <span class="text-[10px] font-medium mt-0.5">Trang Chủ</span>
+          </button>
+          <button
+            onclick="openUploadModal()"
+            class="flex flex-col items-center text-espresso/70 hover:text-terracotta transition"
+          >
+            <i class="fa-solid fa-circle-plus text-lg"></i>
+            <span class="text-[10px] font-medium mt-0.5">Đăng Ảnh</span>
+          </button>
+          <div class="relative -top-5">
+            <button
+              onclick="showInfoModal()"
+              class="w-12 h-12 rounded-full bg-terracotta text-white flex items-center justify-center shadow-lg shadow-terracotta/40 hover:scale-105 active:scale-95 transition"
+            >
+              <i class="fa-solid fa-users text-xl"></i>
+            </button>
+          </div>
+          <button
+            onclick="showGuestbookFocus()"
+            class="flex flex-col items-center text-espresso/70 hover:text-terracotta transition"
+          >
+            <i class="fa-solid fa-book-open text-lg"></i>
+            <span class="text-[10px] font-medium mt-0.5">Lưu Bút</span>
+          </button>
+          <button
+            onclick="showInfoModal()"
+            class="flex flex-col items-center text-espresso/70 hover:text-sageGreen transition"
+          >
+            <i class="fa-solid fa-shield-heart text-lg"></i>
+            <span class="text-[10px] font-medium mt-0.5">The Six</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- EVENT ALBUM MODAL -->
+      <div
+        id="event-modal"
+        class="fixed inset-0 z-50 bg-[#F7EFE5] opacity-0 pointer-events-none transition-opacity duration-300 flex flex-col overflow-hidden"
+      >
+        <div
+          class="px-6 py-4 earthy-card border-b border-espresso/10 flex items-center justify-between relative z-10 shrink-0"
+        >
+          <div class="flex items-center gap-3">
+            <button
+              onclick="closeEventModal()"
+              class="w-10 h-10 rounded-full bg-espresso/10 hover:bg-espresso/20 flex items-center justify-center text-espresso transition"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div>
+              <span
+                id="modal-event-date"
+                class="text-xs font-mono text-terracotta font-semibold uppercase tracking-wider"
+                >Date</span
+              >
+              <h2
+                id="modal-event-title"
+                class="text-lg sm:text-xl font-bold text-espresso font-serif"
+              >
+                Event Title
+              </h2>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span
+              id="modal-event-count"
+              class="px-3 py-1 rounded-full bg-terracotta/15 text-terracotta text-xs font-mono font-semibold"
+              >0 ảnh</span
+            >
+          </div>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 no-scrollbar">
+          <div class="max-w-5xl mx-auto">
+            <p
+              id="modal-event-desc"
+              class="text-espresso/80 text-sm sm:text-base font-light mb-6 bg-white/50 p-4 rounded-2xl border border-espresso/10"
+            >
+              Description
+            </p>
+            <div id="modal-album-grid" class="album-photo-grid pb-20"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIRTHDAY EVENT SUB-ALBUMS MODAL -->
+      <div
+        id="birthday-submodal"
+        class="fixed inset-0 z-50 bg-[#F7EFE5] opacity-0 pointer-events-none transition-opacity duration-300 flex flex-col overflow-hidden"
+      >
+        <div
+          class="px-6 py-4 earthy-card border-b border-espresso/10 flex items-center justify-between relative z-10 shrink-0"
+        >
+          <div class="flex items-center gap-3">
+            <button
+              onclick="closeBirthdaySubModal()"
+              class="w-10 h-10 rounded-full bg-espresso/10 hover:bg-espresso/20 flex items-center justify-center text-espresso transition"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div>
+              <span
+                class="text-xs font-mono text-terracotta font-semibold uppercase tracking-wider"
+                >Tháng 12/2025</span
+              >
+              <h2 class="text-lg sm:text-xl font-bold text-espresso font-serif">
+                Sinh Nhật Rực Rỡ Tuổi 20 (Sub-Albums)
+              </h2>
+            </div>
+          </div>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 no-scrollbar">
+          <div class="max-w-5xl mx-auto">
+            <p
+              class="text-espresso/80 text-sm sm:text-base font-light mb-6 bg-white/50 p-4 rounded-2xl border border-espresso/10"
+            >
+              Chọn sub-album theo từng thành viên và năm sinh nhật để xem trọn
+              bộ khoảnh khắc.
+            </p>
+
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-20"
+              id="birthday-subalbums-list"
+            >
+              <!-- Dynamically rendered birthday sub-albums -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIGHTBOX ZOOM MODAL -->
+      <div
+        id="lightbox"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-espresso/95 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 p-2 sm:p-6"
+      >
+        <button
+          onclick="closeLightbox()"
+          class="absolute top-4 right-4 w-11 h-11 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center text-xl transition z-50"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div
+          class="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center justify-center"
+        >
+          <img
+            id="lightbox-img"
+            src=""
+            alt="Zoomed Photo"
+            class="max-h-[80vh] w-auto object-contain rounded-2xl shadow-2xl"
+          />
+          <p
+            id="lightbox-caption"
+            class="text-white/80 text-xs sm:text-sm mt-4 font-light text-center font-mono"
+          >
+            Khoảnh khắc thanh xuân
+          </p>
+        </div>
+      </div>
+
+      <!-- INFO MODAL (The Core Six Registry) -->
+      <div
+        id="info-modal"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-espresso/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 p-4"
+      >
+        <div
+          class="earthy-card max-w-md w-full p-6 rounded-3xl relative border border-espresso/20 shadow-2xl bg-[#F7EFE5]"
+        >
+          <button
+            onclick="closeInfoModal()"
+            class="absolute top-4 right-4 text-espresso/70 hover:text-espresso"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+          <h3 class="text-2xl font-bold text-espresso mb-2 font-serif">
+            The Core Six 🌿
+          </h3>
+          <p class="text-xs text-espresso/70 mb-6">
+            Bấm vào tên thành viên bất kỳ để khám phá bộ sưu tập ảnh cá nhân:
+          </p>
+          <div class="space-y-2 mb-6 text-sm">
+            <div
+              onclick="openMemberGallery('Nguyễn Hương Giang')"
+              class="bg-white/65 p-3 rounded-2xl border border-espresso/5 flex justify-between items-center cursor-pointer hover:border-terracotta transition group"
+            >
+              <span
+                class="font-semibold text-espresso group-hover:text-terracotta transition"
+                >Nguyễn Hương Giang
+                <i
+                  class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1 opacity-50"
+                ></i
+              ></span>
+              <span class="text-xs text-terracotta font-mono font-bold"
+                >25/07/2006</span
+              >
+            </div>
+            <div
+              onclick="openMemberGallery('Đỗ Hữu Tuân')"
+              class="bg-white/65 p-3 rounded-2xl border border-espresso/5 flex justify-between items-center cursor-pointer hover:border-terracotta transition group"
+            >
+              <span
+                class="font-semibold text-espresso group-hover:text-terracotta transition"
+                >Đỗ Hữu Tuân
+                <i
+                  class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1 opacity-50"
+                ></i
+              ></span>
+              <span class="text-xs text-terracotta font-mono font-bold"
+                >16/04/2006</span
+              >
+            </div>
+            <div
+              onclick="openMemberGallery('Chu Thị Lan Anh')"
+              class="bg-white/65 p-3 rounded-2xl border border-espresso/5 flex justify-between items-center cursor-pointer hover:border-terracotta transition group"
+            >
+              <span
+                class="font-semibold text-espresso group-hover:text-terracotta transition"
+                >Chu Thị Lan Anh
+                <i
+                  class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1 opacity-50"
+                ></i
+              ></span>
+              <span class="text-xs text-terracotta font-mono font-bold"
+                >24/10/2006</span
+              >
+            </div>
+            <div
+              onclick="openMemberGallery('Nguyễn Văn Đạt')"
+              class="bg-white/65 p-3 rounded-2xl border border-espresso/5 flex justify-between items-center cursor-pointer hover:border-terracotta transition group"
+            >
+              <span
+                class="font-semibold text-espresso group-hover:text-terracotta transition"
+                >Nguyễn Văn Đạt
+                <i
+                  class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1 opacity-50"
+                ></i
+              ></span>
+              <span class="text-xs text-terracotta font-mono font-bold"
+                >09/04/2006</span
+              >
+            </div>
+            <div
+              onclick="openMemberGallery('Nguyễn Tuấn Anh')"
+              class="bg-white/65 p-3 rounded-2xl border border-espresso/5 flex justify-between items-center cursor-pointer hover:border-terracotta transition group"
+            >
+              <span
+                class="font-semibold text-espresso group-hover:text-terracotta transition"
+                >Nguyễn Tuấn Anh
+                <i
+                  class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1 opacity-50"
+                ></i
+              ></span>
+              <span class="text-xs text-terracotta font-mono font-bold"
+                >20/12/2006</span
+              >
+            </div>
+            <div
+              onclick="openMemberGallery('Phan Lạc Quốc Anh')"
+              class="bg-white/65 p-3 rounded-2xl border border-espresso/5 flex justify-between items-center cursor-pointer hover:border-terracotta transition group"
+            >
+              <span
+                class="font-semibold text-espresso group-hover:text-terracotta transition"
+                >Phan Lạc Quốc Anh
+                <i
+                  class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1 opacity-50"
+                ></i
+              ></span>
+              <span class="text-xs text-terracotta font-mono font-bold"
+                >20/10/2006</span
+              >
+            </div>
+          </div>
+          <button
+            onclick="closeInfoModal()"
+            class="w-full py-3 rounded-xl bg-terracotta hover:bg-terracotta/90 text-white font-semibold text-sm transition shadow-md"
+          >
+            Đóng lại
+          </button>
+        </div>
+      </div>
+
+      <!-- MEMBER PERSONAL GALLERY MODAL -->
+      <div
+        id="member-modal"
+        class="fixed inset-0 z-50 bg-[#F7EFE5] opacity-0 pointer-events-none transition-opacity duration-300 flex flex-col overflow-hidden"
+      >
+        <div
+          class="px-6 py-4 earthy-card border-b border-espresso/10 flex items-center justify-between relative z-10 shrink-0"
+        >
+          <div class="flex items-center gap-3">
+            <button
+              onclick="closeMemberModal()"
+              class="w-10 h-10 rounded-full bg-espresso/10 hover:bg-espresso/20 flex items-center justify-center text-espresso transition"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div>
+              <span
+                class="text-xs font-mono text-terracotta font-semibold uppercase tracking-wider"
+                >Góc Ảnh Cá Nhân</span
+              >
+              <h2
+                id="modal-member-name"
+                class="text-lg sm:text-xl font-bold text-espresso font-serif"
+              >
+                Tên Thành Viên
+              </h2>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span
+              id="modal-member-count"
+              class="px-3 py-1 rounded-full bg-terracotta/15 text-terracotta text-xs font-mono font-semibold"
+              >0 ảnh</span
+            >
+          </div>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 no-scrollbar">
+          <div class="max-w-5xl mx-auto">
+            <p
+              class="text-espresso/80 text-sm sm:text-base font-light mb-4 bg-white/50 p-4 rounded-2xl border border-espresso/10"
+            >
+              Bộ sưu tập khoảnh khắc và kỷ niệm riêng của thành viên trong nhóm
+              (Đồng bộ Cloud Realtime).
+            </p>
+
+            <!-- Search & Filter Bar -->
+            <div class="mb-6 space-y-3">
+              <div class="relative">
+                <input
+                  type="text"
+                  id="member-search-input"
+                  oninput="filterMemberPhotos()"
+                  placeholder="Tìm kiếm theo chú thích, năm, chủ đề..."
+                  class="w-full px-4 py-3 rounded-2xl bg-white/80 border border-espresso/15 text-espresso text-sm pl-11 focus:outline-none focus:border-terracotta shadow-sm"
+                />
+                <div
+                  class="absolute left-4 top-1/2 -translate-y-1/2 text-espresso/40"
+                >
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+              </div>
+              <div
+                class="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar"
+                id="member-filter-buttons"
+              >
+                <button
+                  onclick="setMemberFilter('all', this)"
+                  class="px-4 py-1.5 rounded-full bg-terracotta text-white text-xs font-semibold whitespace-nowrap shadow-sm transition filter-btn"
+                >
+                  Tất cả
+                </button>
+                <button
+                  onclick="setMemberFilter('2025', this)"
+                  class="px-4 py-1.5 rounded-full bg-white/70 text-espresso/80 border border-espresso/15 text-xs font-semibold whitespace-nowrap hover:border-terracotta transition filter-btn"
+                >
+                  2025
+                </button>
+                <button
+                  onclick="setMemberFilter('2026', this)"
+                  class="px-4 py-1.5 rounded-full bg-white/70 text-espresso/80 border border-espresso/15 text-xs font-semibold whitespace-nowrap hover:border-terracotta transition filter-btn"
+                >
+                  2026
+                </button>
+                <button
+                  onclick="setMemberFilter('Chân dung', this)"
+                  class="px-4 py-1.5 rounded-full bg-white/70 text-espresso/80 border border-espresso/15 text-xs font-semibold whitespace-nowrap hover:border-terracotta transition filter-btn"
+                >
+                  Chân dung
+                </button>
+                <button
+                  onclick="setMemberFilter('Du lịch', this)"
+                  class="px-4 py-1.5 rounded-full bg-white/70 text-espresso/80 border border-espresso/15 text-xs font-semibold whitespace-nowrap hover:border-terracotta transition filter-btn"
+                >
+                  Du lịch
+                </button>
+              </div>
+            </div>
+
+            <div id="modal-member-grid" class="album-photo-grid pb-20"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UPLOAD PHOTO MODAL (Firebase Storage & Firestore synced) -->
+      <div
+        id="upload-modal"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-espresso/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 p-4"
+      >
+        <div
+          class="earthy-card max-w-lg w-full p-6 sm:p-8 rounded-3xl relative border border-espresso/20 shadow-2xl bg-[#F7EFE5]"
+        >
+          <button
+            onclick="closeUploadModal()"
+            class="absolute top-4 right-4 text-espresso/70 hover:text-espresso"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+          <h3 class="text-2xl font-bold text-espresso mb-1 font-serif">
+            Tải Ảnh Lên Kỷ Niệm 📸
+          </h3>
+          <p class="text-xs text-espresso/70 mb-6">
+            Thêm ảnh mới vào album sự kiện hoặc góc ảnh cá nhân (Đồng bộ cho cả
+            6 thành viên).
+          </p>
+
+          <div class="space-y-4 text-left">
+            <div>
+              <label class="block text-xs font-semibold text-espresso/80 mb-1.5"
+                >Chọn ảnh từ thiết bị:</label
+              >
+              <input
+                type="file"
+                id="upload-file-input"
+                accept="image/*"
+                class="w-full text-xs text-espresso/80 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-terracotta file:text-white hover:file:bg-terracotta/90 cursor-pointer bg-white/60 p-2 rounded-2xl border border-espresso/15"
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-espresso/80 mb-1.5"
+                >Chú thích / Tiêu đề ảnh:</label
+              >
+              <input
+                type="text"
+                id="upload-caption-input"
+                placeholder="VD: Khoảnh khắc đáng nhớ ở Sapa..."
+                class="w-full px-4 py-3 rounded-2xl bg-white/80 border border-espresso/15 text-espresso text-sm focus:outline-none focus:border-terracotta"
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-espresso/80 mb-1.5"
+                >Chọn nơi lưu trữ (Album hoặc Góc cá nhân):</label
+              >
+              <select
+                id="upload-target-select"
+                class="w-full px-4 py-3 rounded-2xl bg-white/80 border border-espresso/15 text-espresso text-sm focus:outline-none focus:border-terracotta"
+              >
+                <option value="event_1">
+                  Sự kiện: Hành Trình Săn Mây Đà Lạt
+                </option>
+                <option value="event_2">
+                  Sự kiện: Sinh Nhật Rực Rỡ Tuổi 20
+                </option>
+                <option value="event_3">
+                  Sự kiện: Mùa Tổng Kết & Kỷ Yếu 12
+                </option>
+                <option value="event_4">
+                  Sự kiện: Cắm Trại Đêm Hồ Suối Hai
+                </option>
+                <option value="member_Nguyễn Hương Giang">
+                  Góc cá nhân: Nguyễn Hương Giang
+                </option>
+                <option value="member_Đỗ Hữu Tuân">
+                  Góc cá nhân: Đỗ Hữu Tuân
+                </option>
+                <option value="member_Chu Thị Lan Anh">
+                  Góc cá nhân: Chu Thị Lan Anh
+                </option>
+                <option value="member_Nguyễn Văn Đạt">
+                  Góc cá nhân: Nguyễn Văn Đạt
+                </option>
+                <option value="member_Nguyễn Tuấn Anh">
+                  Góc cá nhân: Nguyễn Tuấn Anh
+                </option>
+                <option value="member_Phan Lạc Quốc Anh">
+                  Góc cá nhân: Phan Lạc Quốc Anh
+                </option>
+              </select>
+            </div>
+            <button
+              onclick="handlePhotoUpload()"
+              class="w-full py-3.5 rounded-xl bg-terracotta hover:bg-terracotta/90 text-white font-bold text-sm shadow-md shadow-terracotta/30 transition"
+            >
+              Tải Lên & Đồng Bộ Cloud ✨
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom Notification Toast -->
+    <div
+      id="toast"
+      class="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-espresso text-white px-6 py-3 rounded-2xl shadow-xl text-sm font-medium opacity-0 pointer-events-none transition-all duration-300"
+    >
+      Thông báo hệ thống
+    </div>
+
+    <!-- Application JavaScript Logic & Firebase SDK Integration -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        onSnapshot,
+        query,
+        orderBy,
+      } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+      import {
+        getStorage,
+        ref,
+        uploadBytes,
+        getDownloadURL,
+      } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+      // Cấu hình kết nối từ Firebase của bạn (`memories-97628`)
+      const firebaseConfig = {
+        apiKey: "AIzaSyCl3oYqiiDdYGS-ZWES4SKI20zd9RpdN-Y",
+        authDomain: "memories-97628.firebaseapp.com",
+        projectId: "memories-97628",
+        storageBucket: "memories-97628.firebasestorage.app",
+        messagingSenderId: "1054642141362",
+        appId: "1:1054642141362:web:1c48661da5cbfb57bcb1ab",
+        measurementId: "G-6MLKYM33NK",
+      };
+
+      // Khởi tạo Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const storage = getStorage(app);
+
+      // Gắn vào window để các hàm toàn cục gọi được
+      window.db = db;
+      window.storage = storage;
+      window.collection = collection;
+      window.addDoc = addDoc;
+      window.onSnapshot = onSnapshot;
+      window.query = query;
+      window.orderBy = orderBy;
+      window.ref = ref;
+      window.uploadBytes = uploadBytes;
+      window.getDownloadURL = getDownloadURL;
+
+      // Khởi chạy đồng bộ dữ liệu sau khi đăng nhập thành công
+      window.initFirebaseSync = function () {
+        initGuestbookSync();
+        initPhotosSync();
+      };
+    </script>
+
+    <script>
+      // 1. STRICT VALID BIRTH DATES REGISTRY
+      const validBirthDates = {
+        "25/07/2006": "Nguyễn Hương Giang",
+        "16/04/2006": "Đỗ Hữu Tuân",
+        "24/10/2006": "Chu Thị Lan Anh",
+        "09/04/2006": "Nguyễn Văn Đạt",
+        "20/12/2006": "Nguyễn Tuấn Anh",
+        "20/10/2006": "Phan Lạc Quốc Anh",
+      };
+
+      function handleLogin() {
+        const inputField = document.getElementById("birthdate-input");
+        const enteredDate = inputField.value.trim();
+
+        if (!enteredDate) {
+          showToast("Vui lòng nhập ngày tháng năm sinh!");
+          return;
+        }
+
+        if (validBirthDates.hasOwnProperty(enteredDate)) {
+          const memberName = validBirthDates[enteredDate];
+          document.getElementById("welcome-badge").textContent =
+            `Chào ${memberName} ✨`;
+          showToast(`Xác thực thành công! Chào mừng ${memberName} 🌿`);
+
+          const lockScreen = document.getElementById("lock-screen");
+          const mainWebsite = document.getElementById("main-website");
+
+          gsap.to(lockScreen, {
+            opacity: 0,
+            duration: 0.6,
+            onComplete: () => {
+              lockScreen.style.display = "none";
+              mainWebsite.classList.remove("pointer-events-none");
+              gsap.to(mainWebsite, { opacity: 1, duration: 0.8 });
+
+              // Kích hoạt đồng bộ Realtime từ Firebase
+              if (window.initFirebaseSync) {
+                window.initFirebaseSync();
+              }
+            },
+          });
+        } else {
+          showToast("Ngày sinh không chính xác! Không thể truy cập.");
+          gsap.fromTo(
+            "#birthdate-input",
+            { x: -12 },
+            { x: 12, duration: 0.1, yoyo: true, repeat: 4 },
+          );
+        }
+      }
+
+      function showToast(msg) {
+        const toast = document.getElementById("toast");
+        toast.textContent = msg;
+        gsap.to(toast, { opacity: 1, y: 10, duration: 0.3 });
+        setTimeout(() => {
+          gsap.to(toast, { opacity: 0, y: 0, duration: 0.3 });
+        }, 2600);
+      }
+
+      // 4. EVENTS & ALBUM DATASET (Base + Firestore Sync)
+      const samplePhotosPool = [
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1000&q=80",
+      ];
+
+      const baseEventsData = [
+        {
+          id: 1,
+          title: "Hành Trình Săn Mây Đà Lạt",
+          date: "Tháng 10/2025",
+          cover: samplePhotosPool[0],
+          description:
+            "Chuyến đi 3 ngày 2 đêm đầy ắp tiếng cười, sương lạnh buổi sớm và những nồi lẩu nóng hổi.",
+          photos: samplePhotosPool.slice(0, 10),
+        },
+        {
+          id: 2,
+          title: "Sinh Nhật Rực Rỡ Tuổi 20",
+          date: "Tháng 12/2025",
+          cover: samplePhotosPool[3],
+          description:
+            "Đêm tiệc bất ngờ với bánh kem, nến và các sub-album riêng theo từng thành viên.",
+          isBirthdayEvent: true,
+          photos: samplePhotosPool.slice(2, 12),
+        },
+        {
+          id: 3,
+          title: "Mùa Tổng Kết & Kỷ Yếu 12",
+          date: "Tháng 05/2026",
+          cover: samplePhotosPool[1],
+          description:
+            "Khép lại những năm tháng áo trắng cắp sách đến trường bằng bộ ảnh kỷ niệm thanh xuân.",
+          photos: samplePhotosPool.slice(1, 11),
+        },
+        {
+          id: 4,
+          title: "Cắm Trại Đêm Hồ Suối Hai",
+          date: "Tháng 07/2026",
+          cover: samplePhotosPool[4],
+          description:
+            "Đốt lửa trại, nướng khoai, đàn hát vu vơ và ngắm trọn vẹn bầu trời đầy sao.",
+          photos: samplePhotosPool.slice(4, 12),
+        },
+      ];
+
+      const baseMemberPhotosData = {
+        "Nguyễn Hương Giang": [
+          {
+            url: samplePhotosPool[0],
+            year: "2026",
+            topic: "Du lịch",
+            caption: "Sapa mùa săn mây",
+          },
+          {
+            url: samplePhotosPool[1],
+            year: "2026",
+            topic: "Chân dung",
+            caption: "Ảnh kỷ yếu cận cảnh",
+          },
+        ],
+        "Đỗ Hữu Tuân": [
+          {
+            url: samplePhotosPool[2],
+            year: "2025",
+            topic: "Du lịch",
+            caption: "Đà Lạt trip",
+          },
+          {
+            url: samplePhotosPool[3],
+            year: "2025",
+            topic: "Chân dung",
+            caption: "Chân dung nghiêm túc",
+          },
+        ],
+        "Chu Thị Lan Anh": [
+          {
+            url: samplePhotosPool[4],
+            year: "2026",
+            topic: "Du lịch",
+            caption: "Cắm trại cùng nhóm",
+          },
+          {
+            url: samplePhotosPool[5],
+            year: "2025",
+            topic: "Chân dung",
+            caption: "Chụp ảnh nghệ thuật",
+          },
+        ],
+        "Nguyễn Văn Đạt": [
+          {
+            url: samplePhotosPool[6],
+            year: "2026",
+            topic: "Du lịch",
+            caption: "Khám phá đó đây",
+          },
+          {
+            url: samplePhotosPool[7],
+            year: "2026",
+            topic: "Chân dung",
+            caption: "Khoảnh khắc cool ngầu",
+          },
+        ],
+        "Nguyễn Tuấn Anh": [
+          {
+            url: samplePhotosPool[8],
+            year: "2026",
+            topic: "Chân dung",
+            caption: "Năng động trẻ trung",
+          },
+          {
+            url: samplePhotosPool[9],
+            year: "2025",
+            topic: "Du lịch",
+            caption: "Hành trình thanh xuân",
+          },
+        ],
+        "Phan Lạc Quốc Anh": [
+          {
+            url: samplePhotosPool[1],
+            year: "2026",
+            topic: "Chân dung",
+            caption: "Kỷ yếu đáng nhớ",
+          },
+          {
+            url: samplePhotosPool[10],
+            year: "2025",
+            topic: "Chân dung",
+            caption: "Khoảnh khắc suy tư",
+          },
+        ],
+      };
+
+      let eventsData = JSON.parse(JSON.stringify(baseEventsData));
+      let memberPhotosData = JSON.parse(JSON.stringify(baseMemberPhotosData));
+      let guestbookNotes = [];
+
+      // FIREBASE REALTIME PHOTOS SYNC
+      function initPhotosSync() {
+        if (!window.db) return;
+        const q = window.query(
+          window.collection(window.db, "photos"),
+          window.orderBy("createdAt", "desc"),
+        );
+        window.onSnapshot(q, (snapshot) => {
+          eventsData = JSON.parse(JSON.stringify(baseEventsData));
+          memberPhotosData = JSON.parse(JSON.stringify(baseMemberPhotosData));
+
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            const target = data.target;
+            const photoUrl = data.url;
+            const caption = data.caption || "Khoảnh khắc thanh xuân";
+            const year = data.year || "2026";
+            const topic = data.topic || "Du lịch";
+
+            if (target && target.startsWith("event_")) {
+              const eventId = parseInt(target.replace("event_", ""));
+              const ev = eventsData.find((e) => e.id === eventId);
+              if (ev) {
+                ev.photos.unshift(photoUrl);
+                if (!ev.cover || ev.cover.startsWith("http")) {
+                  ev.cover = photoUrl;
+                }
+              }
+            } else if (target && target.startsWith("member_")) {
+              const memberName = target.replace("member_", "");
+              if (!memberPhotosData[memberName]) {
+                memberPhotosData[memberName] = [];
+              }
+              memberPhotosData[memberName].unshift({
+                url: photoUrl,
+                year: year,
+                topic: topic,
+                caption: caption,
+              });
+            }
+          });
+
+          renderEvents();
+          if (
+            currentMemberName &&
+            document
+              .getElementById("member-modal")
+              .classList.contains("pointer-events-none") === false
+          ) {
+            renderMemberPhotos();
+          }
+        });
+      }
+
+      // FIREBASE REALTIME GUESTBOOK SYNC
+      function initGuestbookSync() {
+        if (!window.db) return;
+        const q = window.query(
+          window.collection(window.db, "guestbooks"),
+          window.orderBy("createdAt", "desc"),
+        );
+        window.onSnapshot(q, (snapshot) => {
+          guestbookNotes = [];
+          snapshot.forEach((doc) => {
+            guestbookNotes.push({ id: doc.id, ...doc.data() });
+          });
+          renderGuestbook();
+        });
+      }
+
+      // Render Homepage Event Cover Cards
+      const eventsContainer = document.getElementById("events-container");
+
+      function renderEvents() {
+        if (!eventsContainer) return;
+        eventsContainer.innerHTML = "";
+        eventsData.forEach((event) => {
+          const card = document.createElement("div");
+          card.className =
+            "earthy-card rounded-3xl overflow-hidden shadow-xl cursor-pointer group hover:border-terracotta/50 transition-all duration-300";
+          card.onclick = () => {
+            if (event.isBirthdayEvent) {
+              openBirthdaySubModal();
+            } else {
+              openEventModal(event.id);
+            }
+          };
+          card.innerHTML = `
+                    <div class="relative overflow-hidden aspect-[16/10] bg-espresso/10">
+                        <img src="${event.cover}" alt="${event.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-espresso/60 via-transparent opacity-70 group-hover:opacity-50 transition-opacity"></div>
+                        <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-espresso/70 backdrop-blur-md border border-white/15 text-[11px] font-semibold text-warmCream uppercase tracking-wider">
+                            <i class="fa-solid fa-images mr-1"></i> ${event.photos.length} Khoảnh Khắc ${event.isBirthdayEvent ? "(Sub-Albums)" : ""}
+                        </span>
+                        <div class="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-terracotta text-white text-xs font-semibold shadow-md">
+                            Xem Album <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="text-xs text-terracotta font-mono font-semibold mb-1"><i class="fa-regular fa-calendar mr-1.5"></i>${event.date}</div>
+                        <h3 class="text-xl font-bold text-espresso mb-2 group-hover:text-terracotta transition-colors font-serif">${event.title}</h3>
+                        <p class="text-espresso/80 text-xs line-clamp-2 font-light">${event.description}</p>
+                    </div>
+                `;
+          eventsContainer.appendChild(card);
+        });
+      }
+
+      // Open Regular Event Modal
+      const eventModal = document.getElementById("event-modal");
+      const modalEventTitle = document.getElementById("modal-event-title");
+      const modalEventDate = document.getElementById("modal-event-date");
+      const modalEventDesc = document.getElementById("modal-event-desc");
+      const modalEventCount = document.getElementById("modal-event-count");
+      const modalAlbumGrid = document.getElementById("modal-album-grid");
+
+      function openEventModal(eventId) {
+        const event = eventsData.find((e) => e.id === eventId);
+        if (!event) return;
+
+        modalEventTitle.textContent = event.title;
+        modalEventDate.textContent = event.date;
+        modalEventDesc.textContent = event.description;
+        modalEventCount.textContent = `${event.photos.length} ảnh`;
+
+        modalAlbumGrid.innerHTML = "";
+        event.photos.forEach((photoUrl, index) => {
+          const photoCard = document.createElement("div");
+          photoCard.className =
+            "aspect-square rounded-2xl overflow-hidden bg-espresso/10 cursor-pointer group shadow-md opacity-0 scale-95";
+          photoCard.innerHTML = `
+                    <img src="${photoUrl}" alt="Album photo ${index + 1}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" onclick="openLightbox('${photoUrl}', '${event.title} - Ảnh ${index + 1}')">
+                `;
+          modalAlbumGrid.appendChild(photoCard);
+        });
+
+        eventModal.classList.remove("pointer-events-none");
+        gsap.to(eventModal, { opacity: 1, duration: 0.3 });
+        document.body.style.overflow = "hidden";
+
+        gsap.to(modalAlbumGrid.children, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.4,
+          stagger: 0.03,
+          ease: "power2.out",
+          delay: 0.1,
+        });
+      }
+
+      function closeEventModal() {
+        gsap.to(eventModal, {
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => {
+            eventModal.classList.add("pointer-events-none");
+            document.body.style.overflow = "auto";
+          },
+        });
+      }
+
+      // Birthday Sub-Albums Modal
+      const birthdaySubModal = document.getElementById("birthday-submodal");
+      const birthdaySubalbumsList = document.getElementById(
+        "birthday-subalbums-list",
+      );
+
+      function openBirthdaySubModal() {
+        birthdaySubalbumsList.innerHTML = "";
+
+        const subAlbumsData = [
+          {
+            name: "Nguyễn Hương Giang",
+            year: "2025",
+            cover: samplePhotosPool[3],
+          },
+          {
+            name: "Đỗ Hữu Tuân",
+            year: "2025",
+            cover: samplePhotosPool[4],
+          },
+          {
+            name: "Chu Thị Lan Anh",
+            year: "2025",
+            cover: samplePhotosPool[5],
+          },
+          {
+            name: "Nguyễn Văn Đạt",
+            year: "2025",
+            cover: samplePhotosPool[6],
+          },
+          {
+            name: "Nguyễn Tuấn Anh",
+            year: "2025",
+            cover: samplePhotosPool[7],
+          },
+          {
+            name: "Phan Lạc Quốc Anh",
+            year: "2025",
+            cover: samplePhotosPool[8],
+          },
+        ];
+
+        subAlbumsData.forEach((sub) => {
+          const card = document.createElement("div");
+          card.className =
+            "earthy-card rounded-2xl overflow-hidden shadow-lg cursor-pointer group hover:border-terracotta transition";
+          card.onclick = () => {
+            closeBirthdaySubModal();
+            openMemberGallery(sub.name);
+          };
+          card.innerHTML = `
+                    <div class="relative aspect-video bg-espresso/10 overflow-hidden">
+                        <img src="${sub.cover}" alt="${sub.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                        <span class="absolute top-2 left-2 px-2.5 py-0.5 rounded-full bg-espresso/70 text-warmCream text-[10px] font-mono font-semibold">Năm ${sub.year}</span>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="font-bold text-espresso font-serif text-base group-hover:text-terracotta transition">Sinh nhật ${sub.name}</h4>
+                        <p class="text-xs text-espresso/70 font-light mt-0.5">Bộ sưu tập ảnh kỷ niệm sinh nhật tuổi 20.</p>
+                    </div>
+                `;
+          birthdaySubalbumsList.appendChild(card);
+        });
+
+        birthdaySubModal.classList.remove("pointer-events-none");
+        gsap.to(birthdaySubModal, { opacity: 1, duration: 0.3 });
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeBirthdaySubModal() {
+        gsap.to(birthdaySubModal, {
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => {
+            birthdaySubModal.classList.add("pointer-events-none");
+            document.body.style.overflow = "auto";
+          },
+        });
+      }
+
+      // Lightbox functions
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightbox-img");
+      const lightboxCaption = document.getElementById("lightbox-caption");
+
+      function openLightbox(url, caption) {
+        lightboxImg.src = url;
+        lightboxCaption.textContent = caption;
+        lightbox.classList.remove("pointer-events-none");
+        gsap.to(lightbox, { opacity: 1, duration: 0.3 });
+      }
+
+      function closeLightbox() {
+        gsap.to(lightbox, {
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => lightbox.classList.add("pointer-events-none"),
+        });
+      }
+
+      // Guestbook functions (Cloud Realtime)
+      function renderGuestbook() {
+        const container = document.getElementById("guestbook-container");
+        if (!container) return;
+        container.innerHTML = "";
+
+        if (guestbookNotes.length === 0) {
+          container.innerHTML = `<div class="text-center py-6 text-espresso/50 text-xs italic">Chưa có lời nhắn nào. Hãy là người đầu tiên gửi lời chúc! 💌</div>`;
+          return;
+        }
+
+        guestbookNotes.forEach((note) => {
+          const item = document.createElement("div");
+          item.className =
+            "bg-white/60 p-4 rounded-2xl border border-espresso/10 shadow-sm";
+          item.innerHTML = `
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-bold text-espresso text-sm">${note.author}</span>
+                        <span class="text-[10px] font-mono text-espresso/50">${note.date}</span>
+                    </div>
+                    <p class="text-espresso/80 text-xs sm:text-sm font-light">${note.message}</p>
+                `;
+          container.appendChild(item);
+        });
+      }
+
+      async function addGuestbookNote() {
+        const authorInput = document.getElementById("guestbook-author");
+        const messageInput = document.getElementById("guestbook-message");
+        const author = authorInput.value.trim();
+        const message = messageInput.value.trim();
+
+        if (!author || !message) {
+          showToast("Vui lòng nhập tên và nội dung lời nhắn!");
+          return;
+        }
+
+        const today = new Date();
+        const dateStr = `${String(today.getDate()).padStart(2, "0")}/${String(today.getMonth() + 1).padStart(2, "0")}/${today.getFullYear()}`;
+
+        try {
+          showToast("Đang gửi lời nhắn lên Cloud...");
+          await window.addDoc(window.collection(window.db, "guestbooks"), {
+            author,
+            message,
+            date: dateStr,
+            createdAt: new Date(),
+          });
+
+          authorInput.value = "";
+          messageInput.value = "";
+          showToast("Đã gửi lời nhắn lên sổ lưu bút thành công! ✨");
+        } catch (error) {
+          console.error("Lỗi gửi lưu bút:", error);
+          showToast("Có lỗi xảy ra, vui lòng thử lại!");
+        }
+      }
+
+      // Member Personal Photo Galleries Data & Functions
+      let currentMemberName = "";
+      let currentMemberFilter = "all";
+
+      const memberModal = document.getElementById("member-modal");
+      const modalMemberName = document.getElementById("modal-member-name");
+      const modalMemberCount = document.getElementById("modal-member-count");
+      const modalMemberGrid = document.getElementById("modal-member-grid");
+      const memberSearchInput = document.getElementById("member-search-input");
+
+      function openMemberGallery(memberName) {
+        closeInfoModal();
+        closeBirthdaySubModal();
+        currentMemberName = memberName;
+        currentMemberFilter = "all";
+        if (memberSearchInput) memberSearchInput.value = "";
+
+        const filterBtns = document.querySelectorAll(
+          "#member-filter-buttons .filter-btn",
+        );
+        filterBtns.forEach((b) => {
+          b.classList.remove("bg-terracotta", "text-white");
+          b.classList.add("bg-white/70", "text-espresso/80");
+        });
+        if (filterBtns[0]) {
+          filterBtns[0].classList.add("bg-terracotta", "text-white");
+          filterBtns[0].classList.remove("bg-white/70", "text-espresso/80");
+        }
+
+        renderMemberPhotos();
+
+        memberModal.classList.remove("pointer-events-none");
+        gsap.to(memberModal, { opacity: 1, duration: 0.3 });
+        document.body.style.overflow = "hidden";
+      }
+
+      function setMemberFilter(filter, btn) {
+        currentMemberFilter = filter;
+        const filterBtns = document.querySelectorAll(
+          "#member-filter-buttons .filter-btn",
+        );
+        filterBtns.forEach((b) => {
+          b.classList.remove("bg-terracotta", "text-white");
+          b.classList.add("bg-white/70", "text-espresso/80");
+        });
+        btn.classList.add("bg-terracotta", "text-white");
+        btn.classList.remove("bg-white/70", "text-espresso/80");
+
+        renderMemberPhotos();
+      }
+
+      function filterMemberPhotos() {
+        renderMemberPhotos();
+      }
+
+      function renderMemberPhotos() {
+        const rawPhotos = memberPhotosData[currentMemberName] || [];
+        const searchTerm = memberSearchInput
+          ? memberSearchInput.value.toLowerCase().trim()
+          : "";
+
+        const filtered = rawPhotos.filter((item) => {
+          const matchesFilter =
+            currentMemberFilter === "all" ||
+            item.year === currentMemberFilter ||
+            item.topic === currentMemberFilter;
+          const matchesSearch =
+            item.caption.toLowerCase().includes(searchTerm) ||
+            item.year.toLowerCase().includes(searchTerm) ||
+            item.topic.toLowerCase().includes(searchTerm);
+          return matchesFilter && matchesSearch;
+        });
+
+        modalMemberName.textContent = currentMemberName;
+        modalMemberCount.textContent = `${filtered.length} ảnh`;
+
+        modalMemberGrid.innerHTML = "";
+        if (filtered.length === 0) {
+          modalMemberGrid.innerHTML = `<div class="col-span-full py-12 text-center text-espresso/60 text-sm italic bg-white/40 rounded-2xl border border-espresso/10">Không tìm thấy khoảnh khắc phù hợp với bộ lọc hoặc từ khóa.</div>`;
+          return;
+        }
+
+        filtered.forEach((item, index) => {
+          const photoCard = document.createElement("div");
+          photoCard.className =
+            "aspect-square rounded-2xl overflow-hidden bg-espresso/10 cursor-pointer group shadow-md opacity-0 scale-95 relative";
+          photoCard.innerHTML = `
+                    <img src="${item.url}" alt="${currentMemberName} photo ${index + 1}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" onclick="openLightbox('${item.url}', '${currentMemberName} - ${item.caption} (${item.year})')">
+                    <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-espresso/80 via-espresso/40 to-transparent p-2.5 opacity-0 group-hover:opacity-100 transition-opacity flex justify-between items-end text-[11px] text-white">
+                        <span class="truncate font-light">${item.caption}</span>
+                        <span class="font-mono text-warmCream font-semibold">${item.year}</span>
+                    </div>
+                `;
+          modalMemberGrid.appendChild(photoCard);
+        });
+
+        gsap.to(modalMemberGrid.children, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.4,
+          stagger: 0.03,
+          ease: "power2.out",
+          delay: 0.1,
+        });
+      }
+
+      function closeMemberModal() {
+        gsap.to(memberModal, {
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => {
+            memberModal.classList.add("pointer-events-none");
+            document.body.style.overflow = "auto";
+          },
+        });
+      }
+
+      // Upload Photo Modal Logic (Firebase Storage & Firestore)
+      const uploadModal = document.getElementById("upload-modal");
+
+      function openUploadModal() {
+        uploadModal.classList.remove("pointer-events-none");
+        gsap.to(uploadModal, { opacity: 1, duration: 0.3 });
+      }
+
+      function closeUploadModal() {
+        gsap.to(uploadModal, {
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => uploadModal.classList.add("pointer-events-none"),
+        });
+      }
+
+      async function handlePhotoUpload() {
+        const fileInput = document.getElementById("upload-file-input");
+        const captionInput = document.getElementById("upload-caption-input");
+        const targetSelect = document.getElementById("upload-target-select");
+
+        const caption = captionInput.value.trim() || "Khoảnh khắc thanh xuân";
+        const targetVal = targetSelect.value;
+
+        if (!fileInput.files || fileInput.files.length === 0) {
+          showToast("Vui lòng chọn một hình ảnh từ thiết bị!");
+          return;
+        }
+
+        const file = fileInput.files[0];
+        showToast("Đang tải ảnh lên Cloudinary...");
+
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "apqulm69"); // 👈 Dùng đúng preset bạn vừa tạo
+
+        try {
+          const response = await fetch(
+            "https://api.cloudinary.com/v1_1/ddru6qfcv/image/upload", // 👈 Dùng đúng Cloud Name của bạn
+            {
+              method: "POST",
+              body: formData,
+            },
+          );
+
+          const data = await response.json();
+          if (!data.secure_url) {
+            throw new Error("Không nhận được đường dẫn URL từ Cloudinary");
+          }
+
+          const imageUrl = data.secure_url;
+
+          // Lưu URL ngắn gọn vào Firestore Database (nhẹ tênh, không sợ lỗi dung lượng)
+          await window.addDoc(window.collection(window.db, "photos"), {
+            url: imageUrl,
+            caption: caption,
+            target: targetVal,
+            year: "2026",
+            topic: targetVal.startsWith("member_") ? "Chân dung" : "Du lịch",
+            createdAt: new Date(),
+          });
+
+          fileInput.value = "";
+          captionInput.value = "";
+          closeUploadModal();
+          showToast("Đã tải ảnh lên và đồng bộ cho cả 6 thành viên! ✨");
+        } catch (error) {
+          console.error("Lỗi upload ảnh:", error);
+          showToast("Có lỗi xảy ra khi tải ảnh lên Cloudinary!");
+        }
+      }
+
+      // Navigation helpers & Modals
+      function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      const infoModal = document.getElementById("info-modal");
+
+      function showInfoModal() {
+        infoModal.classList.remove("pointer-events-none");
+        gsap.to(infoModal, { opacity: 1, duration: 0.3 });
+      }
+
+      function closeInfoModal() {
+        gsap.to(infoModal, {
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => infoModal.classList.add("pointer-events-none"),
+        });
+      }
+
+      function showGuestbookFocus() {
+        document
+          .getElementById("guestbook-section")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+    </script>
+  </body>
+</html>
